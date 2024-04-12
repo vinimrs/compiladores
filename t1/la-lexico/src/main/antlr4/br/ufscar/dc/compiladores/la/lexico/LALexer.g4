@@ -2,65 +2,84 @@ lexer grammar LALexer;
 
 ALGORITMO : 'algoritmo';
 DECLARE : 'declare';
+REAL: 'real';
 LITERAL : 'literal';
 INTEIRO : 'inteiro';
-REAL: 'real';
 LEIA : 'leia';
 ESCREVA : 'escreva';
-LOGICO: 'logico';
-E: 'e';
-OU: 'ou';
-NAO: 'nao';
-SE: 'se';
-SENAO: 'senao';
-FIM_SE:'fim_se';
-ENQUANTO: 'enquanto';
-ENTAO: 'entao';
+FIM_ALGORITMO : 'fim_algoritmo';
 
-REGISTRO:'registro';
-CONSTANTE: 'constante';
+TIPO: 'tipo';
 VAR: 'var';
+CONSTANTE: 'constante';
+REGISTRO: 'registro';
 FIM_REGISTRO: 'fim_registro';
+
+FALSO: 'falso';
+VERDADEIRO: 'verdadeiro';
+
+OU: 'ou';
+E: 'e';
+NAO: 'nao';
+LOGICO: 'logico';
+
+// Loops e condicionais
+SE: 'se';
+FIM_SE: 'fim_se';
+SENAO: 'senao';
+ENQUANTO: 'enquanto';
+FIM_ENQUANTO: 'fim_enquanto';
+PARA: 'para';
+FIM_PARA: 'fim_para';
+ENTAO: 'entao';
+FACA: 'faca';
+ATE: 'ate';
 PROCEDIMENTO: 'procedimento';
 FIM_PROCEDIMENTO: 'fim_procedimento';
 FUNCAO: 'funcao';
-RETORNE: 'retorne';
 FIM_FUNCAO: 'fim_funcao';
-PARA: 'para';
-ATE: 'ate';
-FACA: 'faca';
-FIM_PARA: 'fim_para';
+RETORNE: 'retorne';
+CASO: 'caso';
+FIM_CASO: 'fim_caso';
+SEJA: 'seja';
 
+PONTO_PONTO: '..';
+PONTO: '.';
 
-
-FIM_ALGORITMO : 'fim_algoritmo';
-IDENT : [a-zA-Z_][a-zA-Z_0-9]*;
+CADEIA_NAO_FECHADA : '"' ( ~["\r\n] | '""' )*;
 CADEIA : '"' ( ~["\r\n] | '""' )* '"';
 WS : [ \t\r\n]+ -> skip;
-COMMENT : '{' .*? '}' -> skip;
-DOIS_PONTOS: ':';
-NUM_INT	: ('+'|'-')?('0'..'9')+;
-NUM_REAL	: ('+'|'-')?('0'..'9')+ ('.' ('0'..'9')+)?;
-TIPO: 'tipo';
-INSTANTE: 'instante';
+COMENTARIO : '{' ~('\n'|'\r'|'}')* '}' -> skip;
+COMENTARIO_NAO_FECHADO : '{' ~('}')*;
 
+
+DOIS_PONTOS: ':';
 ABREPAR: '(';
 FECHAPAR: ')';
 VIRGULA: ',';
-ABRE_CHAVE: '[';
-FECHA_CHAVE: ']';
+ABRECOL: '[';
+FECHACOL: ']';
 
-BARRA: '/';
-ADICAO: '+';
-MULTIPLICACAO: '*';
-SUBTRACAO: '-';
-IGUAL: '=';
-
-SETA: '<-';
-MENOR_QUE: '<';
-MENOR_IGUAL: '<=';
-MAIOR_QUE: '>';
+DIFERENTE: '<>';
 MAIOR_IGUAL: '>=';
+MENOR_IGUAL: '<=';
+ATRIBUICAO: '<-';
+IGUAL: '=';
+MAIS: '+';
+MENOS: '-';
+MULTIPLICACAO: '*';
+DIVISAO: '/';
+MAIOR: '>';
+MENOR: '<';
+MOD: '%';
+PONTEIRO: '^';
+ENDERECO: '&';
 
-// Lexer error handling
+NUM_INT	: ('0'..'9')+;
+NUM_REAL : ('0'..'9')+ ('.' ('0'..'9')+)?;
+
+IDENT : [a-zA-Z_][a-zA-Z_0-9]*;
+
+
+
 ERR : . ;

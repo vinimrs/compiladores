@@ -28,6 +28,28 @@ public class Principal {
             Token t = null;
             while ((t = lex.nextToken()).getType() != Token.EOF) {
                 String tokenStr = "<" + "'" + t.getText() + "'" + "," + LALexer.VOCABULARY.getDisplayName(t.getType()) + ">";
+
+                // Se o token for um erro, para a execução
+                if (t.getType() == LALexer.ERR) {
+                    tokenStr = "Linha " + t.getLine() + ": " + t.getText() + " - simbolo nao identificado";
+                    output.append(tokenStr).append(System.lineSeparator());
+                    break;
+                }
+
+                // Se o comentario nao tiver fechado gera erro de comentário não fechado
+                if (t.getType() == LALexer.COMENTARIO_NAO_FECHADO) {
+                    tokenStr = "Linha " + t.getLine() + ": comentario nao fechado";
+                    output.append(tokenStr).append(System.lineSeparator());
+                    break;
+                }
+
+                // Se a string nao tiver fechada gera erro de string nao fechada
+                if (t.getType() == LALexer.CADEIA_NAO_FECHADA) {
+                    tokenStr = "Linha " + t.getLine() + ": cadeia literal nao fechada";
+                    output.append(tokenStr).append(System.lineSeparator());
+                    break;
+                }
+
                 output.append(tokenStr).append(System.lineSeparator());
             }
 
