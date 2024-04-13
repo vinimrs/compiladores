@@ -1,7 +1,6 @@
 package br.ufscar.dc.compiladores.la.lexico;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -19,12 +18,13 @@ public class Principal {
             return;
         }
 
-        // Escreve os tokens no arquivo de saída
         try {
             StringBuilder output = new StringBuilder();
             CharStream cs = CharStreams.fromFileName(args[0]);
+            // Cria um lexer para a entrada
             LALexer lex = new LALexer(cs);
 
+            // Itera sobre os tokens gerados pelo lexer
             Token t = null;
             while ((t = lex.nextToken()).getType() != Token.EOF) {
                 String tokenStr = "<" + "'" + t.getText() + "'" + "," + LALexer.VOCABULARY.getDisplayName(t.getType()) + ">";
@@ -50,9 +50,11 @@ public class Principal {
                     break;
                 }
 
+                // adiciona o token ao arquivo de saída
                 output.append(tokenStr).append(System.lineSeparator());
             }
 
+            // Escreve o arquivo de saída
             Files.write(Paths.get(args[1]), output.toString().getBytes(StandardCharsets.UTF_8));
         } catch (IOException ex) {
             System.err.println("Erro ao abrir os arquivos: " + ex.getMessage());

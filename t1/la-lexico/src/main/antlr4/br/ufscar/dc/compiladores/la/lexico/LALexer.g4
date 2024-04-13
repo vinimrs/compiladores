@@ -1,5 +1,6 @@
 lexer grammar LALexer;
 
+// Palavras reservadas
 ALGORITMO : 'algoritmo';
 DECLARE : 'declare';
 REAL: 'real';
@@ -8,16 +9,13 @@ INTEIRO : 'inteiro';
 LEIA : 'leia';
 ESCREVA : 'escreva';
 FIM_ALGORITMO : 'fim_algoritmo';
-
 TIPO: 'tipo';
 VAR: 'var';
 CONSTANTE: 'constante';
 REGISTRO: 'registro';
 FIM_REGISTRO: 'fim_registro';
-
 FALSO: 'falso';
 VERDADEIRO: 'verdadeiro';
-
 OU: 'ou';
 E: 'e';
 NAO: 'nao';
@@ -46,13 +44,16 @@ SEJA: 'seja';
 PONTO_PONTO: '..';
 PONTO: '.';
 
+// Trata cadeias
 CADEIA_NAO_FECHADA : '"' ( ~["\r\n] | '""' )*;
 CADEIA : '"' ( ~["\r\n] | '""' )* '"';
 WS : [ \t\r\n]+ -> skip;
+
+// Trata comentários
 COMENTARIO : '{' ~('\n'|'\r'|'}')* '}' -> skip;
 COMENTARIO_NAO_FECHADO : '{' ~('}')*;
 
-
+// Trata caracteres especiais
 DOIS_PONTOS: ':';
 ABREPAR: '(';
 FECHAPAR: ')';
@@ -60,6 +61,7 @@ VIRGULA: ',';
 ABRECOL: '[';
 FECHACOL: ']';
 
+// Operadores
 DIFERENTE: '<>';
 MAIOR_IGUAL: '>=';
 MENOR_IGUAL: '<=';
@@ -75,11 +77,12 @@ MOD: '%';
 PONTEIRO: '^';
 ENDERECO: '&';
 
+// Trata números
 NUM_INT	: ('0'..'9')+;
 NUM_REAL : ('0'..'9')+ ('.' ('0'..'9')+)?;
 
+// Trata identificadores
 IDENT : [a-zA-Z_][a-zA-Z_0-9]*;
 
-
-
+// Trata erros
 ERR : . ;
