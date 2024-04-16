@@ -64,8 +64,8 @@ O programa irá receber o programa de entrada a partir do arquivo `la-lexico/pro
 
 Feito por:
 
-Eduardo Henrique Spinelli 800220  
+Eduardo Henrique Spinelli RA: 800220  
 
-Matheus Bessa 801839
+Matheus Bessa RA: 801839
 
-<Vinicius Matheus Romualdo 801258> (https://github.com/vinimrs)
+Vinicius Matheus Romualdo RA: 801258 
