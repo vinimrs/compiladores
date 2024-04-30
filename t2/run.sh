@@ -1,0 +1,1 @@
+cd la-sintatico/ && mvn clean package && mvn exec:java "-Dexec.mainClass=br.ufscar.dc.compiladores.la.sintatico.Principal" "-Dexec.args=./programa.txt ./saida.txt"
