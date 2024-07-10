@@ -29,11 +29,12 @@ public class LASemanticAnaliser extends LABaseVisitor {
     return super.visitCorpo(ctx);
   }
 
-  // Obtém o tipo a partir de uma string
+  // Verifica se a contante ja existe, se não existe, ele adiciona a contante e
+  // seu tipo à SymbolsTable
   @Override
   public Object visitDeclaracao_constante(Declaracao_constanteContext ctx) {
     SymbolsTable atual = escoposAninhados.getEscopo();
-    if (atual.existe(ctx.IDENT().getText())) {
+    if (atual.exists(ctx.IDENT().getText())) {
       LAUtils.adicionarErroSemantico(ctx.start, "constante" + ctx.IDENT().getText()
           + " ja declarado anteriormente");
     } else {
@@ -53,14 +54,14 @@ public class LASemanticAnaliser extends LABaseVisitor {
           break;
 
       }
-      atual.adicionar(ctx.IDENT().getText(), tipo);
+      atual.add(ctx.IDENT().getText(), tipo);
     }
 
     return super.visitDeclaracao_constante(ctx);
   }
 
-  // Verifica se a variavel ja existe, se não existe, ele adiciona a variavel e
-  // seu tipo à SymbolsTable
+  // Verifica se a variavel ja existe, se não existe, ele adiciona a variavel
+  // e seu tipo à SymbolsTable
   @Override
   public Object visitDeclaracao_variavel(Declaracao_variavelContext ctx) {
     SymbolsTable atual = escoposAninhados.getEscopo();
@@ -68,7 +69,7 @@ public class LASemanticAnaliser extends LABaseVisitor {
 
     while (iterator.hasNext()) {
       IdentificadorContext id = iterator.next();
-      if (atual.existe(id.getText())) {
+      if (atual.exists(id.getText())) {
         LAUtils.adicionarErroSemantico(id.start, "identificador " + id.getText()
             + " ja declarado anteriormente");
       } else {
@@ -87,7 +88,7 @@ public class LASemanticAnaliser extends LABaseVisitor {
             tipo = SymbolsTable.Tipos.LOGICO;
             break;
         }
-        atual.adicionar(id.getText(), tipo);
+        atual.add(id.getText(), tipo);
       }
     }
     return super.visitDeclaracao_variavel(ctx);
@@ -95,28 +96,28 @@ public class LASemanticAnaliser extends LABaseVisitor {
 
   // Verifica se uma atribuição é válida e verifica se a expressão da atribuição
   // tem o mesmo tipo que a variável ou é compatível com ela, se não for, emite
-  // erro
+  // erro.
   @Override
   public Object visitDeclaracao_global(Declaracao_globalContext ctx) {
     SymbolsTable atual = escoposAninhados.getEscopo();
-    if (atual.existe(ctx.IDENT().getText())) {
+    if (atual.exists(ctx.IDENT().getText())) {
       LAUtils.adicionarErroSemantico(ctx.start, ctx.IDENT().getText()
           + " ja declarado anteriormente");
     } else {
-      atual.adicionar(ctx.IDENT().getText(), SymbolsTable.Tipos.TIPO);
+      atual.add(ctx.IDENT().getText(), SymbolsTable.Tipos.TIPO);
     }
     return super.visitDeclaracao_global(ctx);
   }
 
-  // Verifica se o tipo básico identificado é válido e verifica se o identificador
-  // foi declarado em algum escopo anterior, se sim, emite erro
+  // Valida se o tipo básico identificado é válido e verifica se o identificador
+  // foi declarado em algum escopo anterior, se sim, emite erro.
   public Object visitTipo_basico_ident(Tipo_basico_identContext contextoTB) {
     if (contextoTB.IDENT() != null) {
       Iterator<SymbolsTable> iterator = escoposAninhados.getPilha().iterator();
       boolean found = false;
       while (iterator.hasNext()) {
         SymbolsTable escopo = iterator.next();
-        if (escopo.existe(contextoTB.IDENT().getText())) {
+        if (escopo.exists(contextoTB.IDENT().getText())) {
           found = true;
           break;
         }
@@ -130,15 +131,15 @@ public class LASemanticAnaliser extends LABaseVisitor {
     return super.visitTipo_basico_ident(contextoTB);
   }
 
-  // Verifica se a variavel foi declarada em algum escopo ligado anterior, se não,
-  // emite erro
+  // Valida se a variavel foi declarada em algum escopo ligado anterior, se não,
+  // emite erro.
   public Object visitIdentificador(IdentificadorContext contextoTB) {
     Iterator<SymbolsTable> iterator = escoposAninhados.getPilha().iterator();
     boolean IdentDec = false;
 
     while (iterator.hasNext()) {
       SymbolsTable escoposAninhados = iterator.next();
-      if (escoposAninhados.existe(contextoTB.IDENT(0).getText())) {
+      if (escoposAninhados.exists(contextoTB.IDENT(0).getText())) {
         IdentDec = true;
         break;
       }
@@ -152,9 +153,9 @@ public class LASemanticAnaliser extends LABaseVisitor {
     return super.visitIdentificador(contextoTB);
   }
 
-  // Verifica se a atribuição é válida.Tb verifica se a expressão da atribuição
+  // Valida se a atribuição é válida e verifica se a expressão da atribuição
   // tem o mesmo tipo que a variável ou é compatível com ela, se não for, emite
-  // erro
+  // erro.
   @Override
   public Object visitCmdAtribuicao(CmdAtribuicaoContext ctx) {
     SymbolsTable.Tipos Exptipo = LAUtils.verificarTipo(escoposAninhados, ctx.expressao());
@@ -164,7 +165,7 @@ public class LASemanticAnaliser extends LABaseVisitor {
       Iterator<SymbolsTable> iterator = escoposAninhados.getPilha().iterator();
       while (iterator.hasNext()) {
         SymbolsTable escopo = iterator.next();
-        if (escopo.existe(var)) {
+        if (escopo.exists(var)) {
           SymbolsTable.Tipos tipoVariavel = LAUtils.verificarTipo(escoposAninhados, var);
           Boolean varNumeric = tipoVariavel == SymbolsTable.Tipos.REAL
               || tipoVariavel == SymbolsTable.Tipos.INT;

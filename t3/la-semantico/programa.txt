@@ -1,14 +1,16 @@
 { leitura de nome e idade com escrita de mensagem usando estes dados }
+
 algoritmo
 	declare
 		nome: literal
 	declare
-		idade: inteiro
+		idade: inteir
 
 	{ leitura de nome e idade do teclado }
 	leia(nome)
-	leia(idade)
+	leia(idades)
 
 	{ saída da mensagem na tela }
 	escreva(nome, " tem ", idade, " anos.")
+
 fim_algoritmo

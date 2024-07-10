@@ -113,3 +113,44 @@ cd t2/ && ./run.sh
 ```
 
 O analisador irá receber o programa de entrada a partir do arquivo `la-sintatico/programa.txt` e gerará a saída em `la-sintatico/saida.txt`.
+
+## T3 (Analisador Semântico)
+
+Seguindo o trabalho T2 foi criado um analisador semântico para a Linguagem Algorítmica (LA), o qual deve analisar se as contruções do programa-fonte estão de acordo com a linguagem. Exemplo:
+
+Entrada:
+
+```
+{ leitura de nome e idade com escrita de mensagem usando estes dados }
+
+algoritmo
+	declare
+		nome: literal
+	declare
+		idade: inteir
+
+	{ leitura de nome e idade do teclado }
+	leia(nome)
+	leia(idades)
+
+	{ saída da mensagem na tela }
+	escreva(nome, " tem ", idade, " anos.")
+
+fim_algoritmo
+```
+
+Saída:
+
+```
+Linha 7: tipo inteir nao declarado
+Linha 11: identificador idades nao declarado
+Fim da compilacao
+```
+
+Para compilar e executar o analisador, será necessário navegar até a pasta `t3`, e executar o `script` de execução, no arquivo `run.sh`, por exemplo:
+
+```
+cd t3/ && ./run.sh
+```
+
+O analisador irá receber o programa de entrada a partir do arquivo `la-semantico/programa.txt` e gerará a saída em `la-semantico/saida.txt`.

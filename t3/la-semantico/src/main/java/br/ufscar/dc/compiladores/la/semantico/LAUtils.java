@@ -16,7 +16,6 @@ import br.ufscar.dc.compiladores.la.semantico.LAParser.Termo_logicoContext;
 import java.util.Iterator;
 
 public class LAUtils {
-  // Lista que armazena erros semânticos
   public static List<String> errosSemanticos = new ArrayList<>();
 
   // Adiciona um erro semântico à lista e informa a linha que foi encontrado, dado
@@ -106,7 +105,7 @@ public class LAUtils {
   }
 
   // Verifica o tipo de um símbolo presente em uma SymbolsTable de símbolos
-  // considerando uma expressão aritmética
+  // considerando uma expressão aritmética.
   public static SymbolsTable.Tipos verificarTipo(Scope escopos, LAParser.Exp_aritmeticaContext ctx) {
     SymbolsTable.Tipos ret = null;
     Iterator<TermoContext> iterator = ctx.termo().iterator();
@@ -122,8 +121,8 @@ public class LAUtils {
     return ret;
   }
 
-  // Checa o tipo de um símbolo presente em uma SymbolsTable de símbolos
-  // considerando um termo
+  // Verifica o tipo de um símbolo presente em uma SymbolsTable de símbolos
+  // considerando um termo.
   public static SymbolsTable.Tipos verificarTipo(Scope escopos, LAParser.TermoContext ctx) {
     SymbolsTable.Tipos ret = null;
 
@@ -142,8 +141,8 @@ public class LAUtils {
     return ret;
   }
 
-  // Checa o tipo de um símbolo presente em uma SymbolsTable de símbolos
-  // considerando um fator
+  // Verifica o tipo de um símbolo presente em uma SymbolsTable de símbolos
+  // considerando um fator.
   public static SymbolsTable.Tipos verificarTipo(Scope escopos, LAParser.FatorContext ctx) {
     SymbolsTable.Tipos ret = null;
 
@@ -160,8 +159,8 @@ public class LAUtils {
     return ret;
   }
 
-  // Checa o tipo de um símbolo presente em uma SymbolsTable de símbolos
-  // considerando uma parcela
+  // Verifica o tipo de um símbolo presente em uma SymbolsTable de símbolos
+  // considerando uma parcela.
   public static SymbolsTable.Tipos verificarTipo(Scope escopos, LAParser.ParcelaContext ctx) {
     SymbolsTable.Tipos ret = SymbolsTable.Tipos.INVALIDO;
 
@@ -173,8 +172,8 @@ public class LAUtils {
     return ret;
   }
 
-  // Checa o tipo de um símbolo presente em uma SymbolsTable de símbolos
-  // considerando uma parcela não unária
+  // Verifica o tipo de um símbolo presente em uma SymbolsTable de símbolos
+  // considerando uma parcela não unária.
   public static SymbolsTable.Tipos verificarTipo(Scope escopos, LAParser.Parcela_nao_unarioContext ctx) {
     if (ctx.identificador() != null) {
       return verificarTipo(escopos, ctx.identificador());
@@ -182,8 +181,8 @@ public class LAUtils {
     return SymbolsTable.Tipos.CADEIA;
   }
 
-  // Checa o tipo de um símbolo presente em uma SymbolsTable de símbolos
-  // considerando um identificador
+  // Verifica o tipo de um símbolo presente em uma SymbolsTable de símbolos
+  // considerando um identificador.
   public static SymbolsTable.Tipos verificarTipo(Scope escopos, LAParser.IdentificadorContext ctx) {
     String nomeVar = "";
     SymbolsTable.Tipos ret = SymbolsTable.Tipos.INVALIDO;
@@ -196,7 +195,7 @@ public class LAUtils {
     Iterator<SymbolsTable> iterator = escopos.getPilha().iterator();
     while (iterator.hasNext()) {
       SymbolsTable SymbolsTable = iterator.next();
-      if (SymbolsTable.existe(nomeVar)) {
+      if (SymbolsTable.exists(nomeVar)) {
         ret = verificarTipo(escopos, nomeVar);
       }
     }
@@ -204,8 +203,8 @@ public class LAUtils {
     return ret;
   }
 
-  // Checa o tipo de um símbolo presente em uma SymbolsTable de símbolos
-  // considerando uma parcela unária
+  // Verifica o tipo de um símbolo presente em uma SymbolsTable de símbolos
+  // considerando uma parcela unária.
   public static SymbolsTable.Tipos verificarTipo(Scope escopos, LAParser.Parcela_unarioContext ctx) {
     if (ctx.NUM_INT() != null) {
       return SymbolsTable.Tipos.INT;
@@ -246,14 +245,14 @@ public class LAUtils {
     }
   }
 
-  // Checa o tipo de um símbolo presente em uma SymbolsTable de símbolos
-  // considerando uma string
+  // Verifica o tipo de um símbolo presente em uma SymbolsTable de símbolos
+  // considerando uma string.
   public static SymbolsTable.Tipos verificarTipo(Scope escopos, String nomeVar) {
     SymbolsTable.Tipos type = null;
     Iterator<SymbolsTable> iterator = escopos.getPilha().iterator();
     while (iterator.hasNext()) {
       SymbolsTable SymbolsTable = iterator.next();
-      type = SymbolsTable.verificar(nomeVar);
+      type = SymbolsTable.verify(nomeVar);
     }
     return type;
   }
