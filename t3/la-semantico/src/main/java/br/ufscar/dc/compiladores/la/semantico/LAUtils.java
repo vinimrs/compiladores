@@ -20,7 +20,7 @@ public class LAUtils {
 
   // Adiciona um erro semântico à lista e informa a linha que foi encontrado, dado
   // um token e a mensagem como parâmetros
-  public static void adicionarErroSemantico(Token t, String mensagem) {
+  public static void addSemanticError(Token t, String mensagem) {
     int linha = t.getLine();
     errosSemanticos.add(String.format("Linha %d: %s", linha, mensagem));
   }

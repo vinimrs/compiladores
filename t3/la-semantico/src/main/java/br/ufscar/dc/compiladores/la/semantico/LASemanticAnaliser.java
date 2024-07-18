@@ -6,7 +6,6 @@ import br.ufscar.dc.compiladores.la.semantico.LAParser.Declaracao_globalContext;
 import br.ufscar.dc.compiladores.la.semantico.LAParser.Declaracao_variavelContext;
 import br.ufscar.dc.compiladores.la.semantico.LAParser.IdentificadorContext;
 import br.ufscar.dc.compiladores.la.semantico.LAParser.Tipo_basico_identContext;
-import br.ufscar.dc.compiladores.la.semantico.LAUtils;
 
 import java.util.Iterator;
 
@@ -15,6 +14,7 @@ public class LASemanticAnaliser extends LABaseVisitor {
   // Cria os escopos como variavel global
   Scope escoposAninhados = new Scope();
 
+  // Verifica se a função principal tem um retorno, se não, emite erro.
   @Override
   public Object visitCorpo(LAParser.CorpoContext ctx) {
     Iterator<LAParser.CmdContext> iterator = ctx.cmd().iterator();
@@ -22,7 +22,7 @@ public class LASemanticAnaliser extends LABaseVisitor {
     while (iterator.hasNext()) {
       LAParser.CmdContext cmd = iterator.next();
       if (cmd.cmdRetorne() != null) {
-        LAUtils.adicionarErroSemantico(cmd.getStart(), "comando retorne nao permitido nesse escopo");
+        LAUtils.addSemanticError(cmd.getStart(), "comando retorne nao permitido nesse escopo");
       }
     }
 
@@ -33,9 +33,9 @@ public class LASemanticAnaliser extends LABaseVisitor {
   // seu tipo à SymbolsTable
   @Override
   public Object visitDeclaracao_constante(Declaracao_constanteContext ctx) {
-    SymbolsTable atual = escoposAninhados.getEscopo();
+    SymbolsTable atual = escoposAninhados.getScope();
     if (atual.exists(ctx.IDENT().getText())) {
-      LAUtils.adicionarErroSemantico(ctx.start, "constante" + ctx.IDENT().getText()
+      LAUtils.addSemanticError(ctx.start, "constante" + ctx.IDENT().getText()
           + " ja declarado anteriormente");
     } else {
       SymbolsTable.Tipos tipo = SymbolsTable.Tipos.INT;
@@ -64,13 +64,13 @@ public class LASemanticAnaliser extends LABaseVisitor {
   // e seu tipo à SymbolsTable
   @Override
   public Object visitDeclaracao_variavel(Declaracao_variavelContext ctx) {
-    SymbolsTable atual = escoposAninhados.getEscopo();
+    SymbolsTable atual = escoposAninhados.getScope();
     Iterator<IdentificadorContext> iterator = ctx.variavel().identificador().iterator();
 
     while (iterator.hasNext()) {
       IdentificadorContext id = iterator.next();
       if (atual.exists(id.getText())) {
-        LAUtils.adicionarErroSemantico(id.start, "identificador " + id.getText()
+        LAUtils.addSemanticError(id.start, "identificador " + id.getText()
             + " ja declarado anteriormente");
       } else {
         SymbolsTable.Tipos tipo = SymbolsTable.Tipos.INT;
@@ -99,9 +99,9 @@ public class LASemanticAnaliser extends LABaseVisitor {
   // erro.
   @Override
   public Object visitDeclaracao_global(Declaracao_globalContext ctx) {
-    SymbolsTable atual = escoposAninhados.getEscopo();
+    SymbolsTable atual = escoposAninhados.getScope();
     if (atual.exists(ctx.IDENT().getText())) {
-      LAUtils.adicionarErroSemantico(ctx.start, ctx.IDENT().getText()
+      LAUtils.addSemanticError(ctx.start, ctx.IDENT().getText()
           + " ja declarado anteriormente");
     } else {
       atual.add(ctx.IDENT().getText(), SymbolsTable.Tipos.TIPO);
@@ -111,46 +111,46 @@ public class LASemanticAnaliser extends LABaseVisitor {
 
   // Valida se o tipo básico identificado é válido e verifica se o identificador
   // foi declarado em algum escopo anterior, se sim, emite erro.
-  public Object visitTipo_basico_ident(Tipo_basico_identContext contextoTB) {
-    if (contextoTB.IDENT() != null) {
+  public Object visitTipo_basico_ident(Tipo_basico_identContext ctx) {
+    if (ctx.IDENT() != null) {
       Iterator<SymbolsTable> iterator = escoposAninhados.getPilha().iterator();
       boolean found = false;
       while (iterator.hasNext()) {
         SymbolsTable escopo = iterator.next();
-        if (escopo.exists(contextoTB.IDENT().getText())) {
+        if (escopo.exists(ctx.IDENT().getText())) {
           found = true;
           break;
         }
       }
 
       if (!found) {
-        LAUtils.adicionarErroSemantico(contextoTB.start,
-            "tipo " + contextoTB.IDENT().getText() + " nao declarado");
+        LAUtils.addSemanticError(ctx.start,
+            "tipo " + ctx.IDENT().getText() + " nao declarado");
       }
     }
-    return super.visitTipo_basico_ident(contextoTB);
+    return super.visitTipo_basico_ident(ctx);
   }
 
   // Valida se a variavel foi declarada em algum escopo ligado anterior, se não,
   // emite erro.
-  public Object visitIdentificador(IdentificadorContext contextoTB) {
+  public Object visitIdentificador(IdentificadorContext ctx) {
     Iterator<SymbolsTable> iterator = escoposAninhados.getPilha().iterator();
     boolean IdentDec = false;
 
     while (iterator.hasNext()) {
       SymbolsTable escoposAninhados = iterator.next();
-      if (escoposAninhados.exists(contextoTB.IDENT(0).getText())) {
+      if (escoposAninhados.exists(ctx.IDENT(0).getText())) {
         IdentDec = true;
         break;
       }
     }
 
     if (!IdentDec) {
-      LAUtils.adicionarErroSemantico(contextoTB.start,
-          "identificador " + contextoTB.IDENT(0).getText() + " nao declarado");
+      LAUtils.addSemanticError(ctx.start,
+          "identificador " + ctx.IDENT(0).getText() + " nao declarado");
     }
 
-    return super.visitIdentificador(contextoTB);
+    return super.visitIdentificador(ctx);
   }
 
   // Valida se a atribuição é válida e verifica se a expressão da atribuição
@@ -182,7 +182,7 @@ public class LASemanticAnaliser extends LABaseVisitor {
     }
 
     if (erro)
-      LAUtils.adicionarErroSemantico(ctx.identificador().start,
+      LAUtils.addSemanticError(ctx.identificador().start,
           "atribuicao nao compativel para " + var);
 
     return super.visitCmdAtribuicao(ctx);

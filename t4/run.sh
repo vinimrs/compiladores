@@ -1,0 +1,1 @@
+cd la-full-semantico/ && mvn clean package && mvn exec:java "-Dexec.mainClass=br.ufscar.dc.compiladores.la.full.semantico.Principal" "-Dexec.args=./programa.txt ./saida.txt"

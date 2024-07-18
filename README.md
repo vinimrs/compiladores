@@ -154,3 +154,93 @@ cd t3/ && ./run.sh
 ```
 
 O analisador irá receber o programa de entrada a partir do arquivo `la-semantico/programa.txt` e gerará a saída em `la-semantico/saida.txt`.
+
+## T4
+
+Como segunda parte do T3, melhoramos o analisador semântico para a Linguagem Algorítmica (LA), o qual deve detectar mais erros:
+
+1. Identificador (variável, constante, procedimento, função, tipo) já declarado anteriormente no escopo, mas agora envolvendo também ponteiros, registros, funções;
+2. Identificador (variável, constante, procedimento, função) não declarado, mas agora envolvendo também ponteiros, registros, funções;
+3. Incompatibilidade entre argumentos e parâmetros formais (número, ordem e tipo) na chamada de um procedimento ou uma função;
+4. Atribuição não compatível com o tipo declarado, agora envolvendo ponteiros e registros;
+5. Uso do comando 'retorne' em um escopo não permitido.
+
+Um exemplo de erros agora detectados:
+
+```
+{ exemplificacao de sub-rotinas na forma de funcao e seu uso }
+
+funcao menorInteiro(valor1: inteiro, valor2: inteiro): inteiro
+{ retorna o menor entre valor1 e valor2; se iguais retorna um deles }
+
+      se valor1 < valor2 entao
+           retorne valor1
+      senao
+           retorne valor2
+      fim_se
+fim_funcao
+
+funcao menorReal(valor1: real, valor2: real): real
+{ retorna o menor entre valor1 e valor2; se iguais, retorna um deles }
+
+      se valor1 < valor2 entao
+           retorne valor1
+      senao
+           retorne valor2
+      fim_se
+fim_funcao
+
+funcao modulo(valor: real): real
+{ retorna o valor absoluto do valor }
+
+      se valor < 0 entao
+           valor <- -valor
+      fim_se
+      retorne valor
+fim_funcao
+
+{ parte principal }
+algoritmo
+      declare
+           primeiroInt, segundoInt: inteiro
+		declare
+           primeiroReal, segundoReal: real
+
+      { entrada de dados }
+      leia(primeiroInt, segundoInt, primeiroReal, segundoReal)
+
+      { algumas saidas e manipulacoes }
+      escreva("O menor inteiro entre", primeiroInt, "e",
+                segundoInt, "eh", menorInteiro(primeiroInt))
+
+      se menorReal(primeiroReal, segundoInt) <> primeiroReal entao
+           escreva(segundoReal, "eh menor que", primeiroReal)
+      fim_se
+
+      se modulo(primeiroReal) = primeiroReal e primeiroReal <> 0 entao
+           escreva("O valor", primeiroReal, "eh positivo")
+      senao
+           escreva("O valor", primeiroReal, "nao eh positivo")
+      fim_se
+
+      escreva("Considerando-se o modulo, tem-se que o menor entre",
+                primeiroReal, "e", segundoReal, "eh",
+                menorReal(modulo(primeiroReal), modulo(segundoReal)))
+fim_algoritmo
+```
+
+Saída:
+
+```
+Linha 44: incompatibilidade de parametros na chamada de menorInteiro
+Linha 46: incompatibilidade de parametros na chamada de menorReal
+Fim da compilacao
+```
+
+Para compilar e executar o analisador, será necessário navegar até a pasta `t4`, e executar o `script` de execução, no arquivo `run.sh`, por exemplo:
+
+```
+cd t4/ && ./run.sh
+```
+
+O analisador irá receber o programa de entrada a partir do arquivo `la-full-semantico/programa.txt` e gerará a saída em `la-full-semantico/saida.txt`.
