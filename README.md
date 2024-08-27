@@ -244,3 +244,8 @@ cd t4/ && ./run.sh
 ```
 
 O analisador irá receber o programa de entrada a partir do arquivo `la-full-semantico/programa.txt` e gerará a saída em `la-full-semantico/saida.txt`.
+
+## T6 (Damo)
+
+Link Excalidraw:
+https://excalidraw.com/#room=d9eec3e06561644369ee,Pdaxt49UOSmpvBPwLHpb5g
